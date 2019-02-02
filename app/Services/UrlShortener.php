@@ -2,19 +2,27 @@
 
 namespace App\Services;
 
-use App\Contracts\IUrlShortener;
 use App\Contracts\IUrlHash;
+use App\Contracts\IUrlShortener;
 use App\Exceptions\InvalidUrlException;
-use App\ShortUrl;
 use App\ShortUrlDTO;
 
 class UrlShortener implements IUrlShortener
 {
+    /**
+     * @var IUrlHash
+     */
     private $hashService;
 
-    public function __construct(IUrlHash $hashService)
+    /**
+     * @var UrlShortenerDataService
+     */
+    private $urlDataService;
+
+    public function __construct(IUrlHash $hashService, UrlShortenerDataService $finder)
     {
         $this->hashService = $hashService;
+        $this->urlDataService = $finder;
     }
 
     function getShortUrl(string $url): ShortUrlDTO
@@ -22,7 +30,7 @@ class UrlShortener implements IUrlShortener
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             throw new InvalidUrlException();
         }
-        $shortUrl = $this->findInDataBase($url);
+        $shortUrl = $this->urlDataService->findInDataBaseByUrl($url);
         if (!$shortUrl) {
 
             $shortUrl = $this->registerNewUrl($url);
@@ -30,18 +38,11 @@ class UrlShortener implements IUrlShortener
         return new ShortUrlDTO($shortUrl);
     }
 
-    private function findInDataBase(string $longUrl): ?ShortUrl
-    {
-        return ShortUrl::query()->where('long_url', $longUrl)->first();
-    }
-
     private function registerNewUrl(string $longUrl)
     {
-        $shortUrl = new ShortUrl();
-        $shortUrl->long_url = $longUrl;
-        $shortUrl->hash = $this->getNextHash($longUrl);
-        $shortUrl->save();
-        return $shortUrl;
+        return $this->urlDataService->storeWithHash($longUrl, function () use ($longUrl) {
+            return $this->getNextHash($longUrl);
+        });
     }
 
     public function getNextHash(string $longUrl, string $hash = null): string
@@ -49,14 +50,9 @@ class UrlShortener implements IUrlShortener
         if (!$hash) {
             $hash = $this->hashService->getUrlHash($longUrl);
         }
-        while ($this->isInUse($hash)) {
+        while ($this->urlDataService->isInUse($hash)) {
             $hash = $this->hashService->getUrlHash($longUrl);
         }
         return $hash;
-    }
-
-    private function isInUse(string $hash): bool
-    {
-        return ShortUrl::query()->where('hash', $hash)->count() > 0;
     }
 }
