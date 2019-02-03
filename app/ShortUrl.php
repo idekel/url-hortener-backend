@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $visit_count
  * @property string $hash
  * @property string $long_url
+ * @method ShortUrl find
  * @package App
  */
 class ShortUrl extends Model

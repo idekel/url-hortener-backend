@@ -10,7 +10,7 @@ class UrlShortenerDataService
 {
     public function findInDataBaseByUrl(string $longUrl): ?ShortUrl
     {
-        return ShortUrl::query()->where('long_url', $longUrl)->first();
+        return $this->findByColumnValue('long_url', $longUrl);
     }
 
     public function isInUse(string $hash): bool
@@ -19,9 +19,9 @@ class UrlShortenerDataService
     }
 
 
-    public function getShortUrlAndIncreaseViewsCount(string $longUrl): ?ShortUrl
+    public function getShortUrlAndIncreaseViewsCount(string $hash): ?ShortUrl
     {
-        $shortUrl = $this->findInDataBaseByUrl($longUrl);
+        $shortUrl = $this->findByHash($hash);
         if ($shortUrl) {
             //delegate this the database to be safe
             DB::table($shortUrl->getTable())->where('id', $shortUrl->id)->increment('visit_count');
@@ -31,6 +31,11 @@ class UrlShortenerDataService
             return $shortUrl;
         }
         return $shortUrl;
+    }
+
+    private function findByHash(string $hash): ?ShortUrl
+    {
+        return $this->findByColumnValue('hash', $hash);
     }
 
 
@@ -56,5 +61,15 @@ class UrlShortenerDataService
             $shortUrl->save();
         });
         return $shortUrl;
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $longUrl
+     * @return ShortUrl
+     */
+    private function findByColumnValue(string $column, $longUrl)
+    {
+        return ShortUrl::query()->where($column, $longUrl)->first();
     }
 }

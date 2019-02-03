@@ -73,7 +73,7 @@ class UrlShortenerRepositoryTest extends TestCase
     {
         $this->getShoUrlEntity();
 
-        $shortUrl = $this->shortenerDataService->getShortUrlAndIncreaseViewsCount('http://someurl.com');
+        $shortUrl = $this->shortenerDataService->getShortUrlAndIncreaseViewsCount('1234567');
 
         self::assertNotNull($shortUrl);
     }
@@ -82,7 +82,7 @@ class UrlShortenerRepositoryTest extends TestCase
     {
         $shortUrlPrevious = $this->getShoUrlEntity();
 
-        $shortUrl = $this->shortenerDataService->getShortUrlAndIncreaseViewsCount('http://someurl.com');
+        $shortUrl = $this->shortenerDataService->getShortUrlAndIncreaseViewsCount('1234567');
 
         self::assertEquals(0, $shortUrlPrevious->visit_count);
         self::assertEquals(1, $shortUrl->visit_count);

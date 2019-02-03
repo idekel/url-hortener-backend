@@ -5,10 +5,6 @@ namespace App;
 
 class ShortUrlDTO
 {
-    /**
-     * @var string
-     */
-    public $accessUrl;
 
     /**
      * @var string
@@ -30,6 +26,5 @@ class ShortUrlDTO
         $this->id = $shortUrl->id;
         $this->hash = $shortUrl->hash;
         $this->viewCount = $shortUrl->visit_count;
-        $this->accessUrl = $this->hash;
     }
 }
