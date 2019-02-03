@@ -16,4 +16,4 @@ Route::get('/', function () {
 });
 
 
-Route::get('/g/{hash}', 'ShortUrlRedirectController@goTo');
+Route::get('/g/{hash}', 'ShortUrlRedirectController@goTo')->name('hash');

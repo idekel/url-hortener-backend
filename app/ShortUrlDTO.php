@@ -9,7 +9,7 @@ class ShortUrlDTO
     /**
      * @var string
      */
-    public $hash;
+    public $hashUrl;
 
     /**
      * @var int
@@ -21,10 +21,16 @@ class ShortUrlDTO
      */
     public $viewCount;
 
+    /**
+     * @var string
+     */
+    public $longUrl;
+
     public function __construct(ShortUrl $shortUrl)
     {
         $this->id = $shortUrl->id;
-        $this->hash = $shortUrl->hash;
+        $this->hashUrl = route('hash', $shortUrl->hash);
         $this->viewCount = $shortUrl->visit_count;
+        $this->longUrl = $shortUrl->long_url;
     }
 }

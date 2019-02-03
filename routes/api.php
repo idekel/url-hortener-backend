@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::put('short/url', 'ShortUrlController@shortUrl');
+
+Route::get('top/{top}/most/visited/urls', 'ShortUrlStatsController@getTopVisitedShortUrls');
