@@ -17,3 +17,7 @@ Route::get('/', function () {
 
 
 Route::get('/g/{hash}', 'ShortUrlRedirectController@goTo')->name('hash');
+
+Route::get('/migrate', function () {
+    echo \Illuminate\Support\Facades\Artisan::call('migrate');
+});
