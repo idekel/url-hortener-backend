@@ -1,6 +1,6 @@
 version: '3'
 services:
-  short-mysql:
+  short-url-mysql:
     image: 'mysql:5.7.25'
     environment:
       - MYSQL_ROOT_PASSWORD=shorturl_pw
