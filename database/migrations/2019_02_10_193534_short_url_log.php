@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ShortUrl extends Migration
+class ShortUrlLog extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class ShortUrl extends Migration
      */
     public function up()
     {
-        Schema::create('short_urls', function (Blueprint $table) {
+        Schema::create('short_url_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('long_url');
-            $table->string('hash', 7);
-            $table->integer('visit_count')->default(0);
             $table->timestamps();
+            $table->integer('short_url_id');
+            $table->string('ip');
+            $table->string('cookie')->nullable(true);
 
-            $table->unique('hash');
+            $table->index('short_url_id');
         });
     }
 
@@ -31,6 +31,6 @@ class ShortUrl extends Migration
      */
     public function down()
     {
-        Schema::drop('short_urls');
+        Schema::drop('short_url_log');
     }
 }

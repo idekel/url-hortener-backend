@@ -4,10 +4,14 @@ namespace App\Services;
 
 
 use App\ShortUrl;
+use App\ShortUrlLog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UrlShortenerDataService
 {
+    const VISITATION_COOKIE = 'short_url_cookie';
+
     public function findInDataBaseByUrl(string $longUrl): ?ShortUrl
     {
         return $this->findByColumnValue('long_url', $longUrl);
@@ -36,6 +40,17 @@ class UrlShortenerDataService
     private function findByHash(string $hash): ?ShortUrl
     {
         return $this->findByColumnValue('hash', $hash);
+    }
+
+    public function logShortUrlVisit(ShortUrl $shortUrl, Request $request)
+    {
+        $log = new ShortUrlLog();
+        $log->ip = $request->ip();
+        if ($request->hasCookie(self::VISITATION_COOKIE)) {
+            $log->cookie = $request->cookie(self::VISITATION_COOKIE);
+        }
+        $log->short_url_id = $shortUrl->id;
+        $log->save();
     }
 
 
