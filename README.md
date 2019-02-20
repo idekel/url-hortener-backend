@@ -11,13 +11,6 @@ URL won't generate the same hash.
 Move to docker directory and run this command. You can get information about the containers by going into docker directory and examine the docker-compose.yml file
 
 
-### `composer install`
-Move to the root of the project and run this command to install all dependencies, also you can run it from inside the container
-
-### modify .env.example
-Rename .env.example to .env and modify the database parameters according to your needs. the defaults are:
-
-
 ### [init database](http://localhost/migrate)
 Click in that url to run migrations, you will see a black page with exit code of migration command. Make sure the database exists before clicking. This is required to create the App tables.
 You can also connect to the container and run `php artisan migrate` in /var/www/html directory
