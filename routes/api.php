@@ -13,10 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
+
+Route::post('auth/login', 'UserController@authenticate');
+Route::post('auth/register', 'UserController@register');
 
 Route::put('short/url', 'ShortUrlController@shortUrl');
 

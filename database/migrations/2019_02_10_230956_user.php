@@ -18,7 +18,7 @@ class User extends Migration
             $table->string('name', 120)->nullable(false);
             $table->string('email', 50)->nullable(false);
             $table->string('password')->nullable(false);
-            $table->string('remember_token', 100)->nullable(false);
+            $table->string('remember_token', 100)->nullable(true);
             $table->timestamps();
 
             $table->unique('email');
