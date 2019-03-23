@@ -15,5 +15,7 @@ RUN apt-get install --yes git
 
 COPY ./ .
 RUN composer.phar install
+RUN cp .env.example .env
+RUN php artisan key:generate
 
 ENTRYPOINT ["php", "vendor/bin/phpunit"]
